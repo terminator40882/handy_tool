@@ -442,6 +442,17 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
 }
 .action-btn svg { width: 21px; height: 21px; }
 .action-btn.danger { color: var(--danger); }
+.action-btn.accent { color: #201503; background: var(--accent); border-color: var(--accent); }
+.action-btn[hidden] { display: none; }
+
+.hint-steps {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  color: var(--ink);
+}
+.hint-steps svg { width: 52px; height: 52px; }
+.hint-steps .hint-arrow { width: 30px; height: 30px; color: var(--accent); }
 
 /* ---------- credit card calibration ---------- */
 

@@ -179,6 +179,53 @@ function openCardCalibration() {
   $("card-cancel").addEventListener("click", cleanup);
 }
 
+/* ---------- install ---------- */
+
+let deferredInstall = null;
+
+function isStandalone() {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.matchMedia("(display-mode: fullscreen)").matches ||
+    navigator.standalone === true
+  );
+}
+
+function initInstall() {
+  const btn = $("install-btn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstall = e;
+    if (!isStandalone()) btn.hidden = false;
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstall = null;
+    btn.hidden = true;
+  });
+
+  // iOS has no install prompt API: show a share -> add-to-home-screen pictogram
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  if (ios && !isStandalone()) btn.hidden = false;
+
+  btn.addEventListener("click", async () => {
+    if (deferredInstall) {
+      deferredInstall.prompt();
+      const { outcome } = await deferredInstall.userChoice;
+      if (outcome === "accepted") {
+        deferredInstall = null;
+        btn.hidden = true;
+      }
+    } else if (ios) {
+      closeSheet();
+      const hint = $("ios-install-hint");
+      hint.hidden = false;
+      hint.addEventListener("click", () => (hint.hidden = true), { once: true });
+    }
+  });
+}
+
 /* ---------- sensors ---------- */
 
 async function initSensors() {
@@ -204,6 +251,7 @@ screen.orientation?.addEventListener("change", () => setTimeout(redrawRuler, 60)
 
 initCalibration();
 initSheet();
+initInstall();
 initSensors();
 
 if ("serviceWorker" in navigator) {

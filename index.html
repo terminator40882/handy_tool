@@ -129,12 +129,24 @@
   </div>
 
   <div class="sheet-actions">
+    <button id="install-btn" class="action-btn accent" aria-label="install app" hidden>
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3v10.2l3.6-3.6L17 11l-5 5-5-5 1.4-1.4L12 13.2zM5 19h14v2H5z"/></svg>
+    </button>
     <button id="card-cal-btn" class="action-btn" aria-label="credit card calibration">
       <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="2" y="8.5" width="20" height="3" fill="currentColor"/></svg>
     </button>
     <button id="reset-btn" class="action-btn danger" aria-label="reset calibration">
       <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 5V2L7 6l5 4V7a5.9 5.9 0 1 1-6 5.9H4A8 8 0 1 0 12 5z"/></svg>
     </button>
+  </div>
+</div>
+
+<!-- iOS install hint: share sheet -> add to home screen -->
+<div id="ios-install-hint" class="overlay" hidden>
+  <div class="hint-steps">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l4 4h-3v9h-2V6H8zM5 10h4v2H7v9h10v-9h-2v-2h4v13H5z"/></svg>
+    <svg class="hint-arrow" viewBox="0 0 24 24"><path fill="currentColor" d="M8 4l8 8-8 8-1.4-1.4L13.2 12 6.6 5.4z"/></svg>
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="currentColor" d="M11 7h2v4h4v2h-4v4h-2v-4H7v-2h4z"/></svg>
   </div>
 </div>
 

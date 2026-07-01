@@ -58,12 +58,14 @@ export function drawRuler(cssPxPerMm) {
     }
   }
 
-  // unit + status marker at the bottom of the ruler
-  ctx.globalAlpha = 1;
-  ctx.fillStyle = calibrated ? "#8b949e" : "#f0a832";
-  ctx.textAlign = "center";
-  ctx.font = "600 11px -apple-system, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText(calibrated ? "cm" : "cm ?", cssW - cmLen / 2 - 12, cssH - 14);
+  // uncalibrated marker at the bottom of the ruler
+  if (!calibrated) {
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#f0a832";
+    ctx.textAlign = "center";
+    ctx.font = "600 13px -apple-system, 'Segoe UI', Roboto, sans-serif";
+    ctx.fillText("?", cssW - cmLen / 2 - 12, cssH - 14);
+  }
 }
 
 export function redrawRuler() {
