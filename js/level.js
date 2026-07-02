@@ -30,11 +30,11 @@ export function initLevel() {
 
     let ok;
     if (s.mode === "flat") {
-      // bubble drifts to the high side on both axes:
-      // roll > 0 = right edge down -> bubble left; pitch > 0 = top edge up -> bubble up
+      // the ball rolls downhill on both axes:
+      // roll > 0 = right edge down -> ball right; pitch > 0 = top edge up -> ball down
       const range = vial.clientWidth / 2 - bubble.clientWidth / 2 - 2;
-      const bx = Math.max(-1, Math.min(1, -s.roll / MAX_ANGLE)) * range;
-      const by = Math.max(-1, Math.min(1, -s.pitch / MAX_ANGLE)) * range;
+      const bx = Math.max(-1, Math.min(1, s.roll / MAX_ANGLE)) * range;
+      const by = Math.max(-1, Math.min(1, s.pitch / MAX_ANGLE)) * range;
       bubble.style.transform = `translate(${bx.toFixed(1)}px, ${by.toFixed(1)}px)`;
       pitchValue.textContent = fmt(s.pitch);
       rollValue.textContent = fmt(s.roll);
