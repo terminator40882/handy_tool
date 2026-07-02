@@ -28,8 +28,17 @@ function screenAngle() {
   return screen.orientation?.angle ?? window.orientation ?? 0;
 }
 
+// Sensor events can fire far faster than the display can paint (up to
+// 200Hz on some devices); coalesce DOM-facing updates to one per frame
+// instead of running every listener on every raw event.
+let emitScheduled = false;
 function emit() {
-  listeners.forEach((fn) => fn(state));
+  if (emitScheduled) return;
+  emitScheduled = true;
+  requestAnimationFrame(() => {
+    emitScheduled = false;
+    listeners.forEach((fn) => fn(state));
+  });
 }
 
 export function subscribe(fn) {

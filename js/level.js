@@ -19,6 +19,16 @@ const MAX_ANGLE = 20; // bubble reaches the vial rim at this tilt
 const LEVEL_EPS = 0.5; // "level" indication threshold, deg
 let wasOk = false;
 
+// vial/bubble sizes only change on layout (resize/orientation), not per sensor
+// event -- reading clientWidth in the hot path forces a synchronous reflow.
+let range = 0;
+function measure() {
+  range = vial.clientWidth / 2 - bubble.clientWidth / 2 - 2;
+}
+measure();
+window.addEventListener("resize", measure);
+screen.orientation?.addEventListener("change", () => setTimeout(measure, 60));
+
 function fmt(v) {
   const r = Math.round(v * 10) / 10;
   return (Object.is(r, -0) ? 0 : r).toFixed(1);
@@ -32,7 +42,6 @@ export function initLevel() {
     if (s.mode === "flat") {
       // the ball rolls downhill on both axes:
       // roll > 0 = right edge down -> ball right; pitch > 0 = top edge up -> ball down
-      const range = vial.clientWidth / 2 - bubble.clientWidth / 2 - 2;
       const bx = Math.max(-1, Math.min(1, s.roll / MAX_ANGLE)) * range;
       const by = Math.max(-1, Math.min(1, s.pitch / MAX_ANGLE)) * range;
       bubble.style.transform = `translate(${bx.toFixed(1)}px, ${by.toFixed(1)}px)`;
