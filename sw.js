@@ -1,4 +1,4 @@
-const CACHE = "handy-tool-v3";
+const CACHE = "handy-tool-v4";
 const ASSETS = [
   "./",
   "./index.html",
