@@ -64,10 +64,28 @@ function updateLevel(beta, gamma) {
   if (beta == null || gamma == null) return;
   const b = beta * DEG;
   const c = gamma * DEG;
-  // unit gravity in device coordinates from the W3C Z-X'-Y'' angles
-  const gx = Math.cos(b) * Math.sin(c);
-  const gy = -Math.sin(b);
+  // unit gravity in the device's physical frame, from the W3C Z-X'-Y'' angles
+  let gx = Math.cos(b) * Math.sin(c);
+  let gy = -Math.sin(b);
   const gz = -Math.cos(b) * Math.cos(c);
+
+  // beta/gamma stay tied to the physical device regardless of how the page
+  // is displayed, so rotate x/y into the current screen frame -- otherwise
+  // the level reads 90° off (a horizontal edge shows as a vertical line)
+  // whenever the browser has rotated to landscape.
+  switch (screenAngle()) {
+    case 90:
+      [gx, gy] = [gy, -gx];
+      break;
+    case 180:
+      gx = -gx;
+      gy = -gy;
+      break;
+    case 270:
+    case -90:
+      [gx, gy] = [-gy, gx];
+      break;
+  }
 
   if (!gInit) {
     g = { x: gx, y: gy, z: gz };
