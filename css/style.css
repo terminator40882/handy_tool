@@ -317,6 +317,67 @@ body {
 .gate-btn.small svg { width: 26px; height: 26px; }
 .gate-btn.ghost { background: var(--card); color: var(--dim); box-shadow: none; border: 1px solid var(--card-edge); }
 
+/* ---------- sensor gate ---------- */
+
+/* Never a full-screen blocker: the container ignores pointer events so the
+   ruler, the device bar and the settings sheet stay usable while it is up. */
+#sensor-gate {
+  position: fixed;
+  left: 0;
+  right: var(--ruler-w);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#sensor-gate[hidden] { display: none; }
+#sensor-gate > * { pointer-events: auto; }
+
+#sensor-gate .gate-btn {
+  width: 78px; height: 78px;
+  animation: gate-pulse 2.4s ease-in-out infinite;
+}
+#sensor-gate .gate-btn svg { width: 36px; height: 36px; }
+
+/* Taken out of the flow so the main button stays exactly centred */
+.gate-dismiss {
+  position: absolute;
+  left: 50%;
+  margin-left: 51px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--card-edge);
+  background: var(--card);
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.gate-dismiss svg { width: 17px; height: 17px; }
+
+/* Permission refused: the button stays tappable for a retry, but stops
+   advertising itself as the way into the app. */
+#sensor-gate.denied .gate-btn {
+  background: var(--card);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes gate-pulse {
+  0%, 100% { box-shadow: 0 8px 34px rgba(240,168,50,.45); }
+  50%      { box-shadow: 0 8px 34px rgba(240,168,50,.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #sensor-gate .gate-btn { animation: none; }
+}
+
 /* ---------- settings sheet ---------- */
 
 #sheet-backdrop { z-index: 28; }

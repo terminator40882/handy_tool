@@ -102,6 +102,7 @@ export const DEVICES = [
   { id: "huawei-p30-pro",   brand: "Huawei",   name: "P30 Pro",         models: ["VOG-L09", "VOG-L29"], logical: [360, 780], dpr: 3, ppi: 398 },
   { id: "huawei-mate20pro", brand: "Huawei",   name: "Mate 20 Pro",     models: ["LYA-L09", "LYA-L29"], logical: [360, 780], dpr: 4, ppi: 538 },
   { id: "oppo-find-x5-pro", brand: "Oppo",     name: "Find X5 Pro",     models: ["CPH2305"], logical: [412, 919], dpr: 3.5,  ppi: 526 },
+  { id: "oppo-find-x9-ultra", brand: "Oppo",    name: "Find X9 Ultra",   models: ["CPH2841", "PMA110"], logical: [412, 905], dpr: 3.5, ppi: 510 },
   { id: "oppo-reno8",       brand: "Oppo",     name: "Reno8",           models: ["CPH2359"], logical: [393, 873], dpr: 2.75, ppi: 411 },
   { id: "moto-g84",         brand: "Motorola", name: "Moto G84",        models: ["moto g84 5G", "XT2347"], logical: [393, 873], dpr: 2.75, ppi: 402 },
   { id: "moto-edge-40",     brand: "Motorola", name: "Edge 40",         models: ["motorola edge 40", "XT2303"], logical: [360, 800], dpr: 3, ppi: 429 },

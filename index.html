@@ -90,10 +90,14 @@
 <!-- Ruler pinned to the physical right edge -->
 <canvas id="ruler"></canvas>
 
-<!-- iOS sensor permission gate -->
-<div id="sensor-gate" class="overlay" hidden>
+<!-- Sensor permission prompt: floats over the sensor cards without covering
+     the ruler, the bottom bar or anything else the app can do without sensors -->
+<div id="sensor-gate" hidden>
   <button id="sensor-enable" class="gate-btn" aria-label="enable sensors">
     <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" transform="rotate(45 12 12)"/></svg>
+  </button>
+  <button id="sensor-dismiss" class="gate-dismiss" aria-label="dismiss">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg>
   </button>
 </div>
 

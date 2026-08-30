@@ -1,4 +1,4 @@
-const CACHE = "handy-tool-v7";
+const CACHE = "handy-tool-v8";
 const ASSETS = [
   "./",
   "./index.html",
@@ -29,10 +29,22 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+// Stale-while-revalidate: answer from the cache so the app opens instantly
+// offline, but always refetch in the background. Plain cache-first pinned
+// clients to whatever build they first installed until the cache name changed.
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
   e.respondWith(
-    caches.match(e.request).then((hit) => hit || fetch(e.request))
+    caches.open(CACHE).then(async (cache) => {
+      const hit = await cache.match(e.request);
+      const fresh = fetch(e.request)
+        .then((res) => {
+          if (res.ok) cache.put(e.request, res.clone());
+          return res;
+        })
+        .catch(() => hit);
+      return hit || fresh;
+    })
   );
 });
