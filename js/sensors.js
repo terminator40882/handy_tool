@@ -135,8 +135,11 @@ function onOrientationAbsolute(e) {
 }
 
 let hasAbsoluteEvent = false;
+let attached = false;
 
 function attach() {
+  if (attached) return;
+  attached = true;
   hasAbsoluteEvent = "ondeviceorientationabsolute" in window;
   window.addEventListener("deviceorientation", onOrientation);
   if (hasAbsoluteEvent) {
@@ -152,16 +155,20 @@ export function needsPermission() {
   );
 }
 
-// Returns "granted" | "denied" | "unsupported"
+// Returns "granted" | "denied" | "needs-gesture" | "unsupported".
+// Safe to call without a user gesture: iOS rejects such a call with a
+// NotAllowedError instead of remembering a denial, which is reported back as
+// "needs-gesture" so the caller can put a button in front of the retry.
 export async function startSensors() {
   if (typeof DeviceOrientationEvent === "undefined") return "unsupported";
   if (needsPermission()) {
+    let res;
     try {
-      const res = await DeviceOrientationEvent.requestPermission();
-      if (res !== "granted") return "denied";
+      res = await DeviceOrientationEvent.requestPermission();
     } catch {
-      return "denied";
+      return "needs-gesture";
     }
+    if (res !== "granted") return "denied";
   }
   attach();
   return "granted";

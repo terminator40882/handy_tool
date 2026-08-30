@@ -8,7 +8,7 @@ import {
   resetCalibration,
 } from "./calibration.js";
 import { drawRuler, redrawRuler } from "./ruler.js";
-import { startSensors, needsPermission } from "./sensors.js";
+import { startSensors, subscribe } from "./sensors.js";
 import { initCompass } from "./compass.js";
 import { initLevel } from "./level.js";
 
@@ -229,18 +229,37 @@ function initInstall() {
 /* ---------- sensors ---------- */
 
 async function initSensors() {
-  if (needsPermission()) {
-    const gate = $("sensor-gate");
-    gate.hidden = false;
-    $("sensor-enable").addEventListener("click", async () => {
-      const res = await startSensors();
-      if (res !== "denied") gate.hidden = true;
-    });
-  } else {
-    await startSensors();
-  }
   initCompass();
   initLevel();
+
+  const gate = $("sensor-gate");
+  const hideGate = () => {
+    gate.hidden = true;
+  };
+  const showGate = (denied) => {
+    gate.hidden = false;
+    gate.classList.toggle("denied", denied);
+  };
+
+  // Readings arriving is the only proof the prompt is unnecessary -- feature
+  // detection alone would leave it up on devices that never needed it.
+  subscribe((s) => {
+    if (s.active) hideGate();
+  });
+
+  // Retrying stays possible in every state: iOS only ever answers a request
+  // made from a real gesture, so the button must survive a refused attempt.
+  $("sensor-enable").addEventListener("click", async () => {
+    const res = await startSensors();
+    if (res === "granted") hideGate();
+    else showGate(res === "denied");
+  });
+  $("sensor-dismiss").addEventListener("click", hideGate);
+
+  // Try without a gesture first; only iOS needs the button, and "unsupported"
+  // means no button would help.
+  const res = await startSensors();
+  if (res === "needs-gesture" || res === "denied") showGate(res === "denied");
 }
 
 /* ---------- boot ---------- */
